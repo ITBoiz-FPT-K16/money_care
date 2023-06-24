@@ -20,3 +20,23 @@ export const loginUser = async (form) => {
         };
     }
 };
+
+export const registerUser = async (form) => {
+    try {
+        const res = await axios.post(`${VITE_API_URL}/auth/register`, form);
+        //case success
+        return {
+            errCode: 0,
+            data: res.data,
+            message: "Register success",
+        };
+    } catch (error) {
+        //case error
+        console.log(error);
+        return {
+            errCode: 1,
+            data: null,
+            message: error.message,
+        };
+    }
+};

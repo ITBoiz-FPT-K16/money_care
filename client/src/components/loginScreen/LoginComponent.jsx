@@ -14,8 +14,6 @@ const LoginComponent = () => {
                     <div className="col-span-2 bg-yellow-100 rounded-tr-lg rounded-br-lg h-100% text-center">
                         <div className="p-5">
                             <FormLogin />
-                            <Divider>Or</Divider>
-                            <GoogleLoginButton />
                         </div>
                     </div>
                 </div>

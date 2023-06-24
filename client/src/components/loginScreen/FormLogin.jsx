@@ -1,13 +1,13 @@
 import React from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
-import { TextField, Button, Typography } from "@mui/material";
+import { TextField, Button, Typography, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { loginStart, loginSuccess, loginFailure } from "../../redux/authSlice";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { loginUser } from "../../services/authService";
+import { loginUser, registerUser } from "../../services/authService";
 import GoogleLoginButton from "./googleLoginButton";
 const loginSchema = Yup.object().shape({
     email: Yup.string().email("Invalid email").required("Email is required"),
@@ -275,6 +275,8 @@ const FormLogin = () => {
                     </Form>
                 )}
             </Formik>
+            <Divider>Or</Divider>
+            <GoogleLoginButton />
         </>
     );
 };
