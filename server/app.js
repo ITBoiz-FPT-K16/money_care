@@ -8,9 +8,11 @@ const mongoose = require("mongoose");
 var session = require("express-session");
 var FileStore = require("session-file-store")(session);
 const passport = require("passport");
+require('dotenv').config({path:__dirname+'/../.env'});
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
+var googleRouter = require("./routes/googleAuthRouter");
 
 var app = express();
 
@@ -44,7 +46,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(
     session({
         name: "session-id",
-        secret: "12345-67890-09876-54321",
+        secret: process.env.SESSION_SECRET,
         saveUninitialized: false,
         resave: false,
         store: new FileStore({ logFn: function () { } }),
@@ -59,6 +61,7 @@ app.use(cookieParser("12345-67890"));
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("//auth/google", googleRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
