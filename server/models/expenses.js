@@ -17,10 +17,6 @@ var Expense = new Schema({
         type: Date,
         required: true
     },
-    date: {
-        type: Date,
-        required: true
-    },
     image: {
         type: String,
         required: false
