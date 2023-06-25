@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-require('mongoose-currency').loadType(mongoose);
+require('@b_kun/mongoose-currency').loadType(mongoose);
 const Currency = mongoose.Types.Currency;
 const Schema = mongoose.Schema;
 
@@ -12,10 +12,6 @@ var Expense = new Schema({
     description: {
         type: String,
         required: false
-    },
-    date: {
-        type: Date,
-        required: true
     },
     date: {
         type: Date,
