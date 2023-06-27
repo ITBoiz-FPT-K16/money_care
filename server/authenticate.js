@@ -62,7 +62,7 @@ exports.jwtPassport = passport.use(new JwtStrategy(opts,
 
 
 exports.verifyUser =
-    passport.authenticate('jwt', { session: false }) || passport.authenticate("google", { failureRedirect: clientUrl + "/login", session: false });
+    passport.authenticate('jwt', { session: false });
 
 exports.verifyAdmin = (req, res, next) => {
     if (req.user.admin) {
