@@ -1,0 +1,163 @@
+[
+    {
+        "name": "Food & Beverage",
+        "image": "https://static.moneylover.me/img/icon/ic_category_foodndrink.png",
+        "type": false
+    },
+    {
+        "name": "Transportation",
+        "image": "https://static.moneylover.me/img/icon/ic_category_transport.png",
+        "type": false
+    },
+    {
+        "name": "Rentals",
+        "image": "https://static.moneylover.me/img/icon/icon_136.png",
+        "type": false
+    },
+    {
+        "name": "Water Bill",
+        "image": "https://static.moneylover.me/img/icon/icon_124.png",
+        "type": false
+    },
+    {
+        "name": "Phone Bill",
+        "image": "https://static.moneylover.me/img/icon/icon_134.png",
+        "type": false
+    },
+    {
+        "name": "Electricity Bill",
+        "image": "https://static.moneylover.me/img/icon/icon_125.png",
+        "type": false
+    },
+    {
+        "name": "Gas Bill",
+        "image": "https://static.moneylover.me/img/icon/icon_139.png",
+        "type": false
+    },
+    {
+        "name": "Television Bill",
+        "image": "https://static.moneylover.me/img/icon/icon_84.png",
+        "type": false
+    },
+    {
+        "name": "Internet Bill",
+        "image": "https://static.moneylover.me/img/icon/icon_126.png",
+        "type": false
+    },
+    {
+        "name": "Other Utility Bills",
+        "image": "https://static.moneylover.me/img/icon/icon_138.png",
+        "type": false
+    },
+    {
+        "name": "Home Maintainance",
+        "image": "https://static.moneylover.me/img/icon/icon_29.png",
+        "type": false
+    },
+    {
+        "name": "Vehicle Maintenance",
+        "image": "https://static.moneylover.me/img/icon/icon_130.png",
+        "type": false
+    },
+    {
+        "name": "Medical Check Up",
+        "image": "https://static.moneylover.me/img/icon/ic_category_doctor.png",
+        "type": false
+    },
+    {
+        "name": "Insurances",
+        "image": "https://static.moneylover.me/img/icon/icon_137.png",
+        "type": false
+    },
+    {
+        "name": "Education",
+        "image": "https://static.moneylover.me/img/icon/ic_category_education.png",
+        "type": false
+    },
+    {
+        "name": "Houseware",
+        "image": "https://static.moneylover.me/img/icon/icon_107.png",
+        "type": false
+    },
+    {
+        "name": "Personal Items",
+        "image": "https://static.moneylover.me/img/icon/icon_41.png",
+        "type": false
+    },
+    {
+        "name": "Pets",
+        "image": "https://static.moneylover.me/img/icon/icon_53.png",
+        "type": false
+    },
+    {
+        "name": "Home Services",
+        "image": "https://static.moneylover.me/img/icon/icon_8.png",
+        "type": false
+    },
+    {
+        "name": "Other Expense",
+        "image": "https://static.moneylover.me/img/icon/ic_category_other_expense.png",
+        "type": false
+    },
+    {
+        "name": "Fitness",
+        "image": "https://static.moneylover.me/img/icon/icon_70.png",
+        "type": false
+    },
+    {
+        "name": "Makeup",
+        "image": "https://static.moneylover.me/img/icon/icon_63.png",
+        "type": false
+    },
+    {
+        "name": "Gifts & Donations",
+        "image": "https://static.moneylover.me/img/icon/ic_category_donations.png",
+        "type": false
+    },
+    {
+        "name": "Streaming Service",
+        "image": "https://static.moneylover.me/img/icon/icon_94.png",
+        "type": false
+    },
+    {
+        "name": "Fun Money",
+        "image": "https://static.moneylover.me/img/icon/icon_49.png",
+        "type": false
+    },
+    {
+        "name": "Investment",
+        "image": "https://static.moneylover.me/img/icon/ic_category_invest.png",
+        "type": false
+    },
+    {
+        "name": "Pay Interest",
+        "image": "https://static.moneylover.me/img/icon/icon_4.png",
+        "type": false
+    },
+    {
+        "name": "Outgoing Transfer",
+        "image": "https://static.moneylover.me/img/icon/icon_142.png",
+        "type": false
+    },
+    {
+        "name": "Collect Interest",
+        "image": "https://static.moneylover.me/img/icon/icon_118.png",
+        "type": true
+    },
+    {
+        "name": "Salary",
+        "image": "https://static.moneylover.me/img/icon/ic_category_salary.png",
+        "type": true
+    },
+    {
+        "name": "Other Income",
+        "image": "https://static.moneylover.me/img/icon/ic_category_other_income.png",
+        "type": true
+    },
+    {
+        "name": "Incoming Transfer",
+        "image": "https://static.moneylover.me/img/icon/icon_143.png",
+        "type": true
+    }
+
+]
