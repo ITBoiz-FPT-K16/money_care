@@ -11,6 +11,10 @@ var Category = new Schema({
     description: {
         type: String,
         required: false
+    },
+    type: {
+        type: Boolean,
+        required: true
     }
 });
 
