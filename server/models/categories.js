@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 require('@b_kun/mongoose-currency').loadType(mongoose);
-const Currency = mongoose.Types.Currency;
 const Schema = mongoose.Schema;
 
 var Category = new Schema({
@@ -8,9 +7,13 @@ var Category = new Schema({
         type: String,
         required: true
     },
-    description: {
+    image: {
         type: String,
-        required: false
+        required: true,
+    },
+    type: {
+        type: Boolean,
+        required: true
     }
 });
 
