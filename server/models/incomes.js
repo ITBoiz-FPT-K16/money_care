@@ -20,11 +20,12 @@ var Income = new Schema({
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
     
 });
 
-module.exports = {
-    Incomes : mongoose.model('Income', Income),
-    IncomeSchema : Income
-}
+module.exports = mongoose.model('Income', Income)

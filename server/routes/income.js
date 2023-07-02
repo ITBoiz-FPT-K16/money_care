@@ -1,7 +1,7 @@
 var express = require('express');
 var incomeRouter = express.Router();
 const bodyParser = require('body-parser');
-const { Incomes } = require('../models/incomes');
+const Incomes = require('../models/incomes');
 const authenticate = require('../authenticate');
 
 incomeRouter.use(bodyParser.json());
