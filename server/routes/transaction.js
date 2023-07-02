@@ -8,7 +8,7 @@ const authenticate = require('../authenticate');
 
 transactionRouter.use(bodyParser.json())
 
-transactionRouter.get("/:year/:month/overral", authenticate.verifyUser, async (req, res, next) => {
+transactionRouter.get("/:year/:month/overall", authenticate.verifyUser, async (req, res, next) => {
    try {
       var year = req.params.year;
       var month = req.params.month;
