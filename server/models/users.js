@@ -1,7 +1,5 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var ExpenseSchema = require('./expenses').ExpenseSchema;
-var IncomeSchema = require('./incomes').IncomeSchema;
 var passportLocalMongoose = require('passport-local-mongoose');
 
 var User = new Schema({
@@ -21,8 +19,6 @@ var User = new Schema({
         type: Boolean,
         default: false
     },
-    expenses: [ExpenseSchema],
-    incomes: [IncomeSchema]
 });
 
 User.plugin(passportLocalMongoose);

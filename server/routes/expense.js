@@ -1,7 +1,7 @@
 var express = require('express');
 var expenseRouter = express.Router();
 const bodyParser = require('body-parser');
-const { Expenses } = require('../models/expenses');
+const Expenses = require('../models/expenses');
 const authenticate = require('../authenticate');
 
 expenseRouter.use(bodyParser.json());
@@ -20,6 +20,12 @@ expenseRouter.route('/')
   .post(authenticate.verifyUser, (req, res, next) => {
     Expenses.create(req.body)
       .then((expense) => {
+        if (expense.category == null || expense.category.type) {
+          res.statusCode = 400;
+          res.setHeader('Content-Type', 'application/json');
+          res.json({ message: 'Category is not valid' });
+          return;
+        }
         expense.user = req.user._id;
         expense.save()
           .then((expense) => {

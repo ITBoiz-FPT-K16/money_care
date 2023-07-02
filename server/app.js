@@ -13,6 +13,10 @@ require('dotenv').config({path:__dirname+'/../.env'});
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var googleRouter = require("./routes/googleAuthRouter");
+var transactionRouter = require("./routes/transaction");
+var expenseRouter = require("./routes/expense");
+var incomeRouter = require("./routes/income");
+var categoryRouter = require("./routes/category");
 
 var app = express();
 
@@ -58,10 +62,13 @@ app.use(passport.session());
 app.use(cookieParser("12345-67890"));
 
 // end of additional code
-
 app.use("/", indexRouter);
+app.use("/transactions", transactionRouter);
 app.use("/users", usersRouter);
-app.use("//auth/google", googleRouter);
+app.use("/auth/google", googleRouter);
+app.use("/expenses", expenseRouter);
+app.use("/incomes", incomeRouter);
+app.use("/categories", categoryRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

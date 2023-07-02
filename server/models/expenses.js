@@ -20,11 +20,13 @@ var Expense = new Schema({
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }
 });
 
 
-module.exports = {
-    Expenses : mongoose.model('Expense', Expense),
-    ExpenseSchema : Expense
-}
+module.exports = mongoose.model('Expense', Expense)
+
