@@ -2,10 +2,12 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     user: {
-        id: null,
+        uid: null,
         name: null,
         email: null,
-        token: null,
+        accessToken: null,
+        refreshToken: null,
+        userImg: null,
     },
     isFetching: false,
     isLogedIn: false,
