@@ -20,6 +20,18 @@ export default {
                 "60%": "60%",
                 "50%": "50%",
             },
+            backgroundColor: {
+                "white-primary": "#ffffff",
+                "white-secondary": "#e4e4e4",
+            },
+            textColor: {
+                "white-primary": "#ffffff",
+                "white-secondary": "#bcbcbc",
+            },
+            borderWidth: {
+                1: "1px",
+                0.5: "0.5px",
+            },
         },
     },
     plugins: [],
