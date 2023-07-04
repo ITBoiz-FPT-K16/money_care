@@ -6,51 +6,63 @@ userRouter.use(bodyParser.json());
 var passport = require("passport");
 var authenticate = require("../authenticate");
 
-userRouter.post("/signup", (req, res, next) => {
-    if (req.body.email == null || req.body.password == null) {
+const admin = require('firebase-admin');
+var serviceAccount = require("../../key/serviceAccountKey.json")
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+})
+
+userRouter.post("/login", async (req, res, next) => {
+
+    if (!req.body.email || !req.body.password) {
         res.statusCode = 400;
         res.setHeader("Content-Type", "application/json");
-        res.json({ err: "Email and password required" });
+        res.json({ success: false, status: "Email or Password not provided" });
         return;
     }
-    User.register(
-        new User({ username: req.body.email }),
-        req.body.password,
-        (err, user) => {
-            if (err) {
-                res.statusCode = 500;
-                res.setHeader("Content-Type", "application/json");
-                res.json({ err: err });
-            } else {
-                user.email = req.body.email;
-                if (req.body.firstname) user.firstname = req.body.firstname;
-                if (req.body.lastname) user.lastname = req.body.lastname;
-                user.save()
-                    .then((user) => {
-                        res.statusCode = 200;
-                        res.setHeader("Content-Type", "application/json");
-                        res.json({ success: true, status: "Registration Successful!" });
-                        return;
-                    })
-                    .catch((err) => {
-                        res.statusCode = 500;
-                        res.setHeader("Content-Type", "application/json");
-                        res.json({ err: err });
-                        return;
-                    })
-            }
-        }
-    );
-});
 
-userRouter.post("/login", passport.authenticate("local"), (req, res) => {
-    var token = authenticate.getToken({ _id: req.user._id });
-    res.statusCode = 200;
-    res.setHeader("Content-Type", "application/json");
-    res.json({
-        success: true,
-        token: token,
-        status: "You are successfully logged in!",
+    const user = await User.findOne({ email: req.body.email });
+    console.log(user);
+    if (!user) {
+        const userResponse = await admin.auth().createUser({
+            email: req.body.email,
+            password: req.body.password,
+            emailVerified: false,
+            displayName: req.body.firstname + " " + req.body.lastname,
+            disabled: false
+        });
+        console.log(userResponse);
+        await User.create({
+            email: req.body.email,
+            username: req.body.email,
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            admin: req.body.admin
+        }).then((user) => {
+            user.save();
+        }
+        , (err) => next(err))
+        .catch((err) => next(err));
+
+            
+    }
+    const userRecord = await admin.auth().getUserByEmail(req.body.email)
+    User.findOne({ email: req.body.email }).then((user) => {
+    if (user) {
+        var token = authenticate.getToken({ _id: user._id });
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json({
+            success: true,
+            token: token,
+            status: "You are successfully logged in!",
+            userRecord: userRecord
+        });
+    }
+    })
+    .catch((error) => {
+        console.log('Error fetching user data:', error);
     });
 });
 

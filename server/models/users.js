@@ -7,6 +7,10 @@ var User = new Schema({
         type: String,
         default: ''
     },
+    username: {
+        type: String,
+        default: ''
+    },
     firstname: {
         type: String,
         default: ''
