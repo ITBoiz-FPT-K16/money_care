@@ -109,7 +109,7 @@ async function getData(id, year, month) {
 
 exportRouter.route('/')
     .get(authenticate.verifyUser, async (req, res, next) => {
-        let id = req.user._id;
+        let id = req.user.uid;
         let workbook = await getData(id);
 
         res.setHeader(
@@ -128,7 +128,7 @@ exportRouter.route('/')
 
 exportRouter.route('/:year/')
     .get(authenticate.verifyUser, async (req, res, next) => {
-        let id = req.user._id;
+        let id = req.user.uid;
         let year = req.params.year;
         let workbook = await getData(id, year);
 
@@ -148,7 +148,7 @@ exportRouter.route('/:year/')
 
 exportRouter.route('/:year/:month')
     .get(authenticate.verifyUser, async (req, res, next) => {
-        let id = req.user._id;
+        let id = req.user.uid;
         let year = req.params.year;
         let month = req.params.month;
         let workbook = await getData(id, year, month);

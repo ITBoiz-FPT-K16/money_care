@@ -22,8 +22,8 @@ var Expense = new Schema({
         ref: 'Category'
     },
     user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        type: String,
+        required: true
     }
 });
 
