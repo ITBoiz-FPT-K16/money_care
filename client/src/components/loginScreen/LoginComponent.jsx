@@ -49,8 +49,6 @@ const LoginComponent = () => {
             );
             navigate("/home/transactions");
             toast.success("Login Success");
-            console.log("auth.currentUser", auth.currentUser);
-            auth = auth;
         }
     };
 
