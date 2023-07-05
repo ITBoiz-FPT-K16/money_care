@@ -11,6 +11,7 @@ import {
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import storage from "redux-persist/lib/storage";
 import authReducer from "./authSlice";
+import transactionReducer from "./transactionSlice";
 const persistConfig = {
     key: "root",
     version: 1,
@@ -25,6 +26,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({
     reducer: {
         auth: persistedReducer,
+        transaction: transactionReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

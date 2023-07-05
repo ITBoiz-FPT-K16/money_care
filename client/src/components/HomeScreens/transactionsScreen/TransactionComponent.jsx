@@ -1,13 +1,12 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
 import Navbar from "../Navbar";
-
+import TransactionsListComponent from "./TransactionsListComponent";
 const TransactionComponent = () => {
     return (
         <div className="pl-20 h-100%">
             <>
                 <Navbar />
-                <div></div>
+                <TransactionsListComponent />
             </>
         </div>
     );
