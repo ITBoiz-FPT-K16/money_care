@@ -31,18 +31,19 @@ const LoginComponent = () => {
     console.log("isAuth", isAuth);
     console.log("auth", auth);
 
-    const doAfterAuth = () => {
+    const doAfterAuth = async () => {
         if (isAuth) {
             console.log("doAfterAuth: isAuth is true");
-            console.log("auth.currentUser", auth.currentUser);
-            dispatch(actionAuth.loginStart());
+
+            const token = await auth.currentUser.getIdToken(true);
+            console.log("token from getIdToken()", token);
 
             dispatch(
                 actionAuth.loginSuccess({
                     uid: auth.currentUser.uid,
                     name: auth.currentUser.displayName,
                     email: auth.currentUser.email,
-                    accessToken: auth.currentUser.accessToken,
+                    accessToken: token,
                     refresh_token: auth.currentUser.refreshToken,
                     userImg: auth.currentUser.photoURL,
                 })
@@ -60,7 +61,9 @@ const LoginComponent = () => {
     });
 
     useEffect(() => {
-        doAfterAuth();
+        if (isAuth) {
+            doAfterAuth();
+        }
     }, [isAuth]);
 
     if (!isAuth) {

@@ -24,6 +24,8 @@ function App() {
                         path="transactions"
                         element={<TransactionComponent />}
                     />
+
+                    {/* Define 1 route report o day */}
                     <Route path="report" element={<ReportComponent />} />
                 </Route>
                 <Route path="*" element={<h1>404</h1>} />
