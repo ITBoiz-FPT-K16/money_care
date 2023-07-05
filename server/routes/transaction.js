@@ -14,7 +14,7 @@ transactionRouter.get("/:year/:month/overall", authenticate.verifyUser, async (r
       var month = req.params.month;
       var startDate = new Date(year, month - 1, 1);
       var endDate = new Date(year, month, 0);
-      var query = { user: req.user._id, date: { $gte: startDate, $lte: endDate } };
+      var query = { user: req.user.uid, date: { $gte: startDate, $lte: endDate } };
       let expenses = await Expenses.find(query).sort({ date: -1 }).exec();
       let incomes = await Incomes.find(query).sort({ date: -1 }).exec();
       let totalExpenses = 0;
@@ -67,6 +67,28 @@ transactionRouter.get("/:year/:month/overall", authenticate.verifyUser, async (r
    }
 })
 
+transactionRouter.get("/total", authenticate.verifyUser, async (req, res, next) => {
+   try {
+      let expenses = await Expenses.find({ user: req.user.uid }).exec();
+      let incomes = await Incomes.find({ user: req.user.uid }).exec();
+      let total = 0;
+      for (let expense of expenses) {
+         total -= expense.amount;
+      }
+      for (let income of incomes) {
+         total += income.amount;
+      }
+      res.statusCode = 200;
+      res.setHeader('Content-Type', 'application/json');
+      res.json({
+         total: total
+      });
+   }
+   catch (err) {
+      next(err);
+   }
+})
+
 
 transactionRouter.get("/:year/:month/detail", authenticate.verifyUser, async (req, res, next) => {
    var year = req.params.year;
@@ -84,7 +106,7 @@ transactionRouter.get("/:year/:month/detail", authenticate.verifyUser, async (re
       });
    }
 
-   var query = { user: req.user._id, date: { $gte: startDate, $lte: endDate } };
+   var query = { user: req.user.uid, date: { $gte: startDate, $lte: endDate } };
    try {
       let expenses = await Expenses.find(query).populate('category');
       let incomes = await Incomes.find(query).populate('category');
@@ -143,7 +165,7 @@ transactionRouter.get("/:year/:month/:categoryId", authenticate.verifyUser, asyn
    var startDate = new Date(year, month - 1, 1);
    var endDate = new Date(year, month, 0);
 
-   var query = { user: req.user._id, date: { $gte: startDate, $lte: endDate }, category: categoryId};
+   var query = { user: req.user.uid, date: { $gte: startDate, $lte: endDate }, category: categoryId};
    Category.findById(categoryId)
       .then((category) => {
          if (!category) {
