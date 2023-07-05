@@ -8,7 +8,7 @@ incomeRouter.use(bodyParser.json());
 
 incomeRouter.route('/')
   .get(authenticate.verifyUser, (req, res, next) => {
-    Incomes.find({ user: req.user._id })
+    Incomes.find({ user: req.user.uid })
       .populate('category')
       .then((incomes) => {
         res.statusCode = 200;
@@ -19,9 +19,9 @@ incomeRouter.route('/')
   }
   )
   .post(authenticate.verifyUser, (req, res, next) => {
+    req.body.user = req.user.uid;
     Incomes.create(req.body)
       .then((income) => {
-        income.user = req.user._id;
         income.save()
           .then((income) => {
             Incomes.findById(income._id)
@@ -42,7 +42,7 @@ incomeRouter.route('/')
   }
   )
   .delete(authenticate.verifyUser, (req, res, next) => {
-    Incomes.remove({ user: req.user._id })
+    Incomes.remove({ user: req.user.uid })
       .then((resp) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
