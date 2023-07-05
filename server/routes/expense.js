@@ -8,7 +8,6 @@ expenseRouter.use(bodyParser.json());
 
 expenseRouter.route('/')
   .get(authenticate.verifyUser, (req, res, next) => {
-    console.log(req.user)
     Expenses.find({ user: req.user.uid })
       .populate('category')
       .then((expenses) => {
