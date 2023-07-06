@@ -9,6 +9,11 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
 const HomeComponent = () => {
+    // const getAccessToken = async () => {
+
+    //     console.log("token", token);
+    // };
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const handleLogout = () => {
@@ -18,7 +23,7 @@ const HomeComponent = () => {
     };
 
     return (
-        <div className="w-full h-100vh bg-white-secondary">
+        <div className="w-full h-100% bg-white-secondary">
             <Sidebar />
             <Outlet />
         </div>

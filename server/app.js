@@ -13,8 +13,6 @@ var cors = require("cors");
 require("dotenv").config({ path: __dirname + "/../.env" });
 
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
-var googleRouter = require("./routes/googleAuthRouter");
 var transactionRouter = require("./routes/transaction");
 var expenseRouter = require("./routes/expense");
 var incomeRouter = require("./routes/income");
@@ -70,8 +68,6 @@ app.use(cors({ origin: "http://localhost:5173" }));
 // end of additional code
 app.use("/", indexRouter);
 app.use("/transactions", transactionRouter);
-app.use("/users", usersRouter);
-app.use("/auth/google", googleRouter);
 app.use("/expenses", expenseRouter);
 app.use("/incomes", incomeRouter);
 app.use("/categories", categoryRouter);

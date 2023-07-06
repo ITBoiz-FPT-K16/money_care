@@ -8,7 +8,7 @@ expenseRouter.use(bodyParser.json());
 
 expenseRouter.route('/')
   .get(authenticate.verifyUser, (req, res, next) => {
-    Expenses.find({ user: req.user._id })
+    Expenses.find({ user: req.user.uid })
       .populate('category')
       .then((expenses) => {
         res.statusCode = 200;
@@ -18,6 +18,7 @@ expenseRouter.route('/')
       .catch((err) => next(err));
   })
   .post(authenticate.verifyUser, (req, res, next) => {
+    req.body.user = req.user.uid;
     Expenses.create(req.body)
       .then((expense) => {
         if (expense.category == null || expense.category.type) {
@@ -26,7 +27,6 @@ expenseRouter.route('/')
           res.json({ message: 'Category is not valid' });
           return;
         }
-        expense.user = req.user._id;
         expense.save()
           .then((expense) => {
             Expenses.findById(expense._id)
@@ -45,7 +45,7 @@ expenseRouter.route('/')
     res.end('PUT operation not supported on /expenses');
   })
   .delete(authenticate.verifyUser, (req, res, next) => {
-    Expenses.remove({ user: req.user._id })
+    Expenses.remove({ user: req.user.uid })
       .then((resp) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
@@ -74,7 +74,7 @@ expenseRouter.route('/:expenseId')
     // check if the user is the owner of the expense
     Expenses.findById(req.params.expenseId)
       .then((expense) => {
-        if (expense.user.equals(req.user._id)) {
+        if (expense.user.equals(req.user.uid)) {
           Expenses.findByIdAndUpdate(req.params.expenseId, {
             $set: req.body
           }, { new: true })
@@ -95,7 +95,7 @@ expenseRouter.route('/:expenseId')
     // check if the user is the owner of the expense
     Expenses.findById(req.params.expenseId)
       .then((expense) => {
-        if (expense.user.equals(req.user._id)) {
+        if (expense.user.equals(req.user.uid)) {
           Expenses.findByIdAndRemove(req.params.expenseId)
             .then((resp) => {
               res.statusCode = 200;

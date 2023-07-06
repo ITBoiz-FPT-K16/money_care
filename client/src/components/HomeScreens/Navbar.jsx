@@ -17,7 +17,7 @@ const Navbar = () => {
 
     console.log(dateToday);
     return (
-        <div className="h-14 bg-white-primary box-border flex justify-between items-center">
+        <div className="h-14 bg-white-primary box-border flex justify-between items-center sticky top-0">
             <div className="flex items-center mx-5">
                 <div className="h-10 w-10">
                     <img
