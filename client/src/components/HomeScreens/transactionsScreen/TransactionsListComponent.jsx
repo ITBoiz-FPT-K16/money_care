@@ -5,14 +5,21 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import MoneyFlowComponent from "./MoneyFlowComponent";
-import ExpensesDescComponent from "./ExpensesDescComponent";
+import ExpensesDescComponent from "./CategoryComponent";
+import { useSelector } from "react-redux";
+import CategoryComponent from "./CategoryComponent";
+import LoadingTransaction from "./LoadingTransaction";
+const TransactionsListComponent = (props) => {
+    const transactionInfo = useSelector(
+        (state) => state.transaction.transactionsInfo
+    );
 
-const TransactionsListComponent = () => {
     const [tabValue, setTabValue] = React.useState("2");
 
     const handleChange = (event, newValue) => {
         setTabValue(newValue);
     };
+
     return (
         <div
             className="flex justify-center items-center"
@@ -30,6 +37,8 @@ const TransactionsListComponent = () => {
                                 borderColor: "divider",
                                 backgroundColor: "#fff",
                                 borderRadius: "10px 10px 0px 0px",
+                                position: "sticky",
+                                top: "60px",
                             }}
                         >
                             <TabList
@@ -47,8 +56,25 @@ const TransactionsListComponent = () => {
                         </TabPanel>
                         <TabPanel value="2" sx={{ padding: "0px" }}>
                             <div className="box-border">
-                                <MoneyFlowComponent />
-                                <ExpensesDescComponent />
+                                {transactionInfo.isFetching && (
+                                    <LoadingTransaction />
+                                )}
+
+                                {!transactionInfo.isFetching && (
+                                    <>
+                                        <MoneyFlowComponent />
+                                        {transactionInfo?.categories?.map(
+                                            (item, index) => {
+                                                return (
+                                                    <CategoryComponent
+                                                        key={index}
+                                                        category={item}
+                                                    />
+                                                );
+                                            }
+                                        )}
+                                    </>
+                                )}
                             </div>
                         </TabPanel>
                         <TabPanel value="3">Item Three</TabPanel>

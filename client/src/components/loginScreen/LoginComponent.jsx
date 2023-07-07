@@ -8,10 +8,16 @@ import StyledFirebaseAuth from "./StyledFirebaseAuth";
 import auth from "../../services/auth";
 
 import * as actionAuth from "../../redux/authSlice";
+import * as actionTransactions from "../../redux/transactionSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import {
+    getTransactionsByTimeRange,
+    getAllTransactions,
+} from "../../services/transactionSerVice";
 
+import moment from "moment";
 const uiConfig = {
     signInFlow: "popup",
     signInSuccessUrl: "/home",
@@ -48,7 +54,9 @@ const LoginComponent = () => {
                     userImg: auth.currentUser.photoURL,
                 })
             );
+
             navigate("/home/transactions");
+
             toast.success("Login Success");
         }
     };
