@@ -9,13 +9,12 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
 const HomeComponent = () => {
-    // const getAccessToken = async () => {
-
-    //     console.log("token", token);
-    // };
+    const API_URL = import.meta.env.VITE_API_URL;
+    console.log("api_url", API_URL);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
+
     const handleLogout = () => {
         auth.signOut();
         dispatch(actionAuth.logout());

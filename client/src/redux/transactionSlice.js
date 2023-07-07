@@ -1,12 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    transactionInfo: {
+    transactionsInfo: {
         totalExpenses: 0,
         totalIncomes: 0,
         categories: [],
         netIncome: 0,
+        timeRange: "",
     },
+
     isFetching: false,
     error: false,
 };
@@ -20,7 +22,7 @@ const transactionSlice = createSlice({
         },
         getTransactionSuccess: (state, action) => {
             state.isFetching = false;
-            state.transactionInfo = action.payload;
+            state.transactionsInfo = action.payload;
             state.error = null;
         },
 

@@ -40,3 +40,24 @@ export const registerUser = async (form) => {
         };
     }
 };
+
+export const getTotalAmount = async (token) => {
+    try {
+        const res = await axios.get(`${VITE_API_URL}/transactions/total`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return {
+            errCode: 0,
+            data: res.data,
+            message: "Get total amount success",
+        };
+    } catch (error) {
+        return {
+            errCode: 1,
+            data: null,
+            message: error.message,
+        };
+    }
+};
