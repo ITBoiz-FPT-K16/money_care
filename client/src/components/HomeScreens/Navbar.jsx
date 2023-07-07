@@ -10,14 +10,19 @@ import EventIcon from "@mui/icons-material/Event";
 import { Button, IconButton, Tooltip } from "@mui/material";
 import moment from "moment/moment";
 import { timeRangeOptions } from "./timeRangeOptions";
+import { useSelector } from "react-redux";
+import { currencyFormat } from "../../utils";
 const Navbar = () => {
     const pathName = window.location.pathname;
     const dateToday = moment(new Date()).format("DD");
     const [rangeTime, setRangeTime] = useState(timeRangeOptions[0]);
+    const totalAmount = useSelector(
+        (state) => state.auth.auth.user.totalAmount
+    );
 
     console.log(dateToday);
     return (
-        <div className="h-14 bg-white-primary box-border flex justify-between items-center sticky top-0">
+        <div className="h-14 bg-white-primary box-border flex justify-between items-center sticky top-0 z-10">
             <div className="flex items-center mx-5">
                 <div className="h-10 w-10">
                     <img
@@ -31,7 +36,9 @@ const Navbar = () => {
                         <ArrowDropDownIcon />
                     </div>
                     <div>
-                        <strong className="text-base">-27,000,000</strong>
+                        <strong className="text-base">
+                            {currencyFormat(totalAmount)}
+                        </strong>
                     </div>
                 </div>
             </div>

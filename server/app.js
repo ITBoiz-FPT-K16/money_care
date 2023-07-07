@@ -8,7 +8,8 @@ const mongoose = require("mongoose");
 var session = require("express-session");
 var FileStore = require("session-file-store")(session);
 const passport = require("passport");
-require('dotenv').config({path:__dirname+'/../.env'});
+const cors = require("cors");
+require("dotenv").config({ path: __dirname + "/../.env" });
 
 var indexRouter = require("./routes/index");
 var transactionRouter = require("./routes/transaction");
@@ -22,7 +23,7 @@ var app = express();
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
-
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -52,7 +53,7 @@ app.use(
         secret: process.env.SESSION_SECRET,
         saveUninitialized: false,
         resave: false,
-        store: new FileStore({ logFn: function () { } }),
+        store: new FileStore({ logFn: function () {} }),
     })
 );
 

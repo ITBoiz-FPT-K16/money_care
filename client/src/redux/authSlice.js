@@ -8,6 +8,7 @@ const initialState = {
         accessToken: null,
         refreshToken: null,
         userImg: null,
+        totalAmount: 0,
     },
     isFetching: false,
     isLogedIn: false,
@@ -39,9 +40,18 @@ const authSlice = createSlice({
             state.isLogedIn = false;
             state.error = null;
         },
+
+        setTotalAmount: (state, action) => {
+            state.user.totalAmount = action.payload;
+        },
     },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout } =
-    authSlice.actions;
+export const {
+    loginStart,
+    loginSuccess,
+    loginFailure,
+    logout,
+    setTotalAmount,
+} = authSlice.actions;
 export default authSlice.reducer;
