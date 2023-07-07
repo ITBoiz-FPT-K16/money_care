@@ -21,8 +21,8 @@ transactionRouter.get(
                 user: req.user.uid,
                 date: { $gte: startDate, $lte: endDate },
             };
-            let expenses = await Expenses.find(query).sort({ date: -1 }).exec();
-            let incomes = await Incomes.find(query).sort({ date: -1 }).exec();
+            let expenses = await Expenses.find(query).sort({ date: -1 }).lean().exec();
+            let incomes = await Incomes.find(query).sort({ date: -1 }).lean().exec();
             let totalExpenses = 0;
             let totalIncomes = 0;
 
@@ -76,8 +76,8 @@ transactionRouter.get(
     authenticate.verifyUser,
     async (req, res, next) => {
         try {
-            let expenses = await Expenses.find({ user: req.user.uid }).exec();
-            let incomes = await Incomes.find({ user: req.user.uid }).exec();
+            let expenses = await Expenses.find({ user: req.user.uid }).lean().exec();
+            let incomes = await Incomes.find({ user: req.user.uid }).lean().exec();
             let total = 0;
             for (let expense of expenses) {
                 total -= expense.amount;
@@ -95,92 +95,83 @@ transactionRouter.get(
         }
     }
 );
-
-transactionRouter.get(
-    "/:year/:month/detail",
-    authenticate.verifyUser,
-    async (req, res, next) => {
-        var year = req.params.year;
-        var month = req.params.month;
-        var startDate = new Date(year, month - 1, 1);
-        var endDate = new Date(year, month, 0);
-        let dateInMonth = [];
-        let expenseList = [],
-            incomeList = [];
-        // generate object date list in dateInMonth
-        for (let i = 1; i <= endDate.getDate(); i++) {
-            dateInMonth.push({
-                date: new Date(year, month - 1, i).toDateString(),
-                totalExpenses: 0,
-                totalIncomes: 0,
-            });
-        }
-
-        var query = {
-            user: req.user.uid,
-            date: { $gte: startDate, $lte: endDate },
-        };
-        try {
-            let expenses = await Expenses.find(query).populate("category");
-            let incomes = await Incomes.find(query).populate("category");
-            let totalExpenses = 0;
-            let totalIncomes = 0;
-            res.statusCode = 200;
-            res.setHeader("Content-Type", "application/json");
-            for (let e of expenses) {
-                totalExpenses += e.amount;
-            }
-            for (let i of incomes) {
-                totalIncomes += i.amount;
-            }
-
-            for (let element of dateInMonth) {
-                expenses.forEach((e) => {
-                    if (e.date.toDateString() === element.date) {
-                        element.totalExpenses += e.amount;
-                    }
-                    if (
-                        expenseList.some((expense) =>
-                            expense._id.equals(e.category._id)
-                        )
-                    ) {
-                        expenseList.find((expense) =>
-                            expense._id.equals(e.category._id)
-                        ).total += e.amount;
-                    } else {
-                        expenseList.push(e.category);
-                    }
-                });
-                incomes.forEach((i) => {
-                    if (i.date.toDateString() === element.date) {
-                        element.totalIncomes += i.amount;
-                    }
-                    if (
-                        incomeList.some((income) =>
-                            income._id.equals(i.category._id)
-                        )
-                    ) {
-                        incomeList.find((income) =>
-                            income._id.equals(i.category._id)
-                        ).total += i.amount;
-                    } else {
-                        incomeList.push(i.category);
-                    }
-                });
-            }
-
-            res.json({
-                totalExpenses: totalExpenses,
-                totalIncomes: totalIncomes,
-                dateInMonth: dateInMonth,
-                expenseList: expenseList,
-                incomeList: incomeList,
-            });
-        } catch (error) {
-            next(error);
-        }
+transactionRouter.get("/:year/:month/detail", authenticate.verifyUser, async (req, res, next) => {
+    var year = req.params.year;
+    var month = req.params.month;
+    var startDate = new Date(year, month - 1, 1);
+    var endDate = new Date(year, month, 0);
+    let dateInMonth = [];
+    let expenseList = [], incomeList = [];
+    // generate object date list in dateInMonth
+    for (let i = 1; i <= endDate.getDate(); i++) {
+        dateInMonth.push({
+            date: (new Date(year, month - 1, i)).toDateString(),
+            totalExpenses: 0,
+            totalIncomes: 0
+        });
     }
-);
+
+    var query = { user: req.user.uid, date: { $gte: startDate, $lte: endDate } };
+    try {
+        let expenses = await Expenses.find(query).populate('category').lean();
+        let incomes = await Incomes.find(query).populate('category').lean();
+        let totalExpenses = 0;
+        let totalIncomes = 0;
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        for (let e of expenses) {
+            totalExpenses += e.amount;
+        }
+        for (let i of incomes) {
+            totalIncomes += i.amount;
+        }
+
+        for (let element of dateInMonth) {
+            expenses.forEach((e) => {
+                if (e.date.toDateString() === element.date) {
+                    element.totalExpenses += e.amount;
+                }
+            })
+            incomes.forEach((i) => {
+                if (i.date.toDateString() === element.date) {
+                    element.totalIncomes += i.amount;
+                }
+            })
+        }
+
+        expenses.forEach((e) => {
+            e.category.total = e.amount;
+            if (expenseList.some((expense) => expense._id.equals(e.category._id))) {
+                expenseList.find((expense) => expense._id.equals(e.category._id)).total += e.amount
+            }
+            else {
+                expenseList.push(e.category);
+            }
+        })
+
+        incomes.forEach((i) => {
+            i.category.total = i.amount;
+            if (incomeList.some((income) => income._id.equals(i.category._id))) {
+                incomeList.find((income) => income._id.equals(i.category._id)).total += i.amount;
+            }
+            else {
+                incomeList.push(i.category);
+            }
+        })
+
+
+        res.json({
+            totalExpenses: totalExpenses,
+            totalIncomes: totalIncomes,
+            dateInMonth: dateInMonth,
+            expenseList: expenseList,
+            incomeList: incomeList
+        });
+    } catch (error) {
+        next(error)
+    }
+})
+
 
 transactionRouter.get(
     "/:year/:month/:categoryId",
@@ -205,9 +196,11 @@ transactionRouter.get(
             }
             Expenses.find(query)
                 .sort({ date: -1 })
+                .lean()
                 .then((expenses) => {
                     Incomes.find(query)
                         .sort({ date: -1 })
+                        .lean()
                         .then(
                             (incomes) => {
                                 let total = 0;
