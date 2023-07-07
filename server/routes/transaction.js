@@ -15,8 +15,8 @@ transactionRouter.get("/:year/:month/overall", authenticate.verifyUser, async (r
       var startDate = new Date(year, month - 1, 1);
       var endDate = new Date(year, month, 0);
       var query = { user: req.user.uid, date: { $gte: startDate, $lte: endDate } };
-      let expenses = await Expenses.find(query).sort({ date: -1 }).exec();
-      let incomes = await Incomes.find(query).sort({ date: -1 }).exec();
+      let expenses = await Expenses.find(query).sort({ date: -1 }).lean().exec();
+      let incomes = await Incomes.find(query).sort({ date: -1 }).lean().exec();
       let totalExpenses = 0;
       let totalIncomes = 0;
 
@@ -27,7 +27,7 @@ transactionRouter.get("/:year/:month/overall", authenticate.verifyUser, async (r
          totalIncomes += income.amount;
       }
       // get All categories in database
-      let categories = await Category.find({}).exec();
+      let categories = await Category.find({}).lean().exec();
       for (let category of categories) {
          for (let expense of expenses) {
             if (category._id.equals(expense.category)) {
@@ -108,8 +108,8 @@ transactionRouter.get("/:year/:month/detail", authenticate.verifyUser, async (re
 
    var query = { user: req.user.uid, date: { $gte: startDate, $lte: endDate } };
    try {
-      let expenses = await Expenses.find(query).populate('category');
-      let incomes = await Incomes.find(query).populate('category');
+      let expenses = await Expenses.find(query).populate('category').lean();
+      let incomes = await Incomes.find(query).populate('category').lean();
       let totalExpenses = 0;
       let totalIncomes = 0;
       res.statusCode = 200;
@@ -126,25 +126,34 @@ transactionRouter.get("/:year/:month/detail", authenticate.verifyUser, async (re
             if (e.date.toDateString() === element.date) {
                element.totalExpenses += e.amount;
             }
-            if (expenseList.some((expense) => expense._id.equals(e.category._id))) {
-               expenseList.find((expense) => expense._id.equals(e.category._id)).total += e.amount;
-            }
-            else {
-               expenseList.push(e.category);
-            }
          })
          incomes.forEach((i) => {
             if (i.date.toDateString() === element.date) {
                element.totalIncomes += i.amount;
             }
-            if (incomeList.some((income) => income._id.equals(i.category._id))) {
-               incomeList.find((income) => income._id.equals(i.category._id)).total += i.amount;
-            }
-            else {
-               incomeList.push(i.category);
-            }
          })
       }
+
+      expenses.forEach((e) => {
+         e.category.total = e.amount;
+         if (expenseList.some((expense) => expense._id.equals(e.category._id))) {
+            expenseList.find((expense) => expense._id.equals(e.category._id)).total += e.amount
+         }
+         else {
+            expenseList.push(e.category);
+         }
+      })
+
+      incomes.forEach((i) => {
+         i.category.total = i.amount;
+         if (incomeList.some((income) => income._id.equals(i.category._id))) {
+            incomeList.find((income) => income._id.equals(i.category._id)).total += i.amount;
+         }
+         else {
+            incomeList.push(i.category);
+         }
+      })
+
 
       res.json({
          totalExpenses: totalExpenses,
@@ -165,7 +174,7 @@ transactionRouter.get("/:year/:month/:categoryId", authenticate.verifyUser, asyn
    var startDate = new Date(year, month - 1, 1);
    var endDate = new Date(year, month, 0);
 
-   var query = { user: req.user.uid, date: { $gte: startDate, $lte: endDate }, category: categoryId};
+   var query = { user: req.user.uid, date: { $gte: startDate, $lte: endDate }, category: categoryId };
    Category.findById(categoryId)
       .then((category) => {
          if (!category) {
