@@ -33,7 +33,7 @@ transactionRouter.get(
                 totalIncomes += income.amount;
             }
             // get All categories in database
-            let categories = await Category.find({}).clean().exec();
+            let categories = await Category.find({}).lean().exec();
             for (let category of categories) {
                 for (let expense of expenses) {
                     if (category._id.equals(expense.category)) {

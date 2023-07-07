@@ -16,8 +16,8 @@ const Navbar = () => {
     const pathName = window.location.pathname;
     const dateToday = moment(new Date()).format("DD");
     const [rangeTime, setRangeTime] = useState(timeRangeOptions[0]);
-    const totalIncomes = useSelector(
-        (state) => state.transaction.transactionsInfo.totalIncomes
+    const totalAmount = useSelector(
+        (state) => state.auth.auth.user.totalAmount
     );
 
     console.log(dateToday);
@@ -37,7 +37,7 @@ const Navbar = () => {
                     </div>
                     <div>
                         <strong className="text-base">
-                            {currencyFormat(totalIncomes)}
+                            {currencyFormat(totalAmount)}
                         </strong>
                     </div>
                 </div>

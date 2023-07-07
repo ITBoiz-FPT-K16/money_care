@@ -13,13 +13,20 @@ const CategoryComponent = (props) => {
     const { category } = props;
     const isIncome = category.type;
     let transactionsInThisCategory;
+    let totalAmountInThisCategory = 0;
     if (isIncome) {
         transactionsInThisCategory = category.incomes;
+    } else {
+        transactionsInThisCategory = category.expenses;
     }
+
+    transactionsInThisCategory?.forEach((transaction) => {
+        totalAmountInThisCategory += transaction.amount;
+    });
     console.log("transactionsInThisCategory", transactionsInThisCategory);
 
     return (
-        <div className="bg-white-primary">
+        <div className="bg-white-primary mb-5">
             <div className="py-3 px-5 flex justify-between items-center">
                 <div className="flex items-center">
                     <div className="w-14 h-14">
@@ -30,13 +37,13 @@ const CategoryComponent = (props) => {
                             <strong>{category.name}</strong>
                         </div>
                         <div className="text-slate-400">
-                            {transactionsInThisCategory.length} Transactions
+                            {transactionsInThisCategory?.length} Transactions
                         </div>
                     </div>
                 </div>
                 <div className="text-xl">
                     {isIncome ? "+" : "-"}{" "}
-                    {currencyFormat(transactionInfo.totalIncomes)}
+                    {currencyFormat(totalAmountInThisCategory)}
                 </div>
             </div>
             <Divider />
