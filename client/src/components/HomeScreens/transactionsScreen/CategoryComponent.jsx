@@ -71,7 +71,8 @@ const CategoryComponent = (props) => {
                                 isIncome ? "text-blue-500" : "text-red-500"
                             }`}
                         >
-                            {isIncome ? "+" : "-"} {transaction.amount}
+                            {isIncome ? "+" : "-"}{" "}
+                            {currencyFormat(transaction.amount)}
                         </div>
                     </div>
                 );
