@@ -25,3 +25,35 @@ export const getAllTransactions = async (token) => {
     });
     console.log("rea all transaction>>>", res.data);
 };
+
+export const createTransactionIncome = async (data, token) => {
+    try {
+        const res = await axios.post(`${API_URL}/incomes`, data, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("res.data", res.data);
+        return {
+            errCode: 0,
+            data: res.data,
+            message: "Create transaction successfully",
+        };
+    } catch (error) {
+        return { errCode: 1, data: null, message: error.response.data.message };
+    }
+};
+
+export const createTransactionExpense = async (data, token) => {
+    try {
+        const res = await axios.post(`${API_URL}/expenses`, data, {
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("res.data", res.data);
+        return {
+            errCode: 0,
+            data: res.data,
+            message: "Create transaction successfully",
+        };
+    } catch (error) {
+        return { errCode: 1, data: null, message: error.response.data.message };
+    }
+};
