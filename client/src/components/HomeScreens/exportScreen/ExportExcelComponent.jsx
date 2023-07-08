@@ -18,23 +18,31 @@ const ExportExcelComponent = () => {
         setYear(e.target.value);
     };
 
-    const handleExportByMonth = () => {
-        console.log(month);
-        setMonth("");
+    const handleExportByMonth = async () => {
+        try {
+            const res = await exportExcel(month, token);
+            console.log("export all");
+            setMonth("");
+        } catch (error) {
+            toast.error(err.message);
+        }
     };
 
     const handleExportByYear = async () => {
         try {
             const res = await exportExcel(year, token);
-            console.log(res);
             setYear("");
         } catch (err) {
             toast.error(err.message);
         }
     };
 
-    const handleExportAll = () => {
-        console.log("export all");
+    const handleExportAll = async () => {
+        try {
+            const res = await exportExcel("", token);
+        } catch (err) {
+            toast.error(err.message);
+        }
     };
     return (
         <div className="h-100vh pl-20">
@@ -66,6 +74,11 @@ const ExportExcelComponent = () => {
                             variant="contained"
                             color="success"
                             onClick={handleExportByMonth}
+                            disabled={
+                                month.length !== 7 ||
+                                isNaN(month.slice(0, 4)) ||
+                                isNaN(month.slice(5, 7))
+                            }
                         >
                             <FileDownloadIcon />
                             Export
@@ -100,6 +113,7 @@ const ExportExcelComponent = () => {
                             variant="contained"
                             color="success"
                             onClick={handleExportByYear}
+                            disabled={year.length !== 4 || isNaN(year)}
                         >
                             <FileDownloadIcon />
                             Export

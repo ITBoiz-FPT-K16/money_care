@@ -12,7 +12,7 @@ export const exportExcel = async (time, token) => {
         const link = document.createElement("a");
 
         link.href = url;
-        link.setAttribute("download", `Project_${id}.xlsx`);
+        link.setAttribute("download", `export_${time}.xlsx`);
         document.body.appendChild(link);
         link.click();
     } catch (error) {
