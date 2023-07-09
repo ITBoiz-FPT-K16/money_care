@@ -8,7 +8,8 @@ const mongoose = require("mongoose");
 var session = require("express-session");
 var FileStore = require("session-file-store")(session);
 const passport = require("passport");
-const cors = require("cors");
+var cors = require("cors");
+
 require("dotenv").config({ path: __dirname + "/../.env" });
 
 var indexRouter = require("./routes/index");
@@ -37,29 +38,32 @@ const url = config.mongoUrl;
 const connect = mongoose.connect(url);
 
 connect.then(
-    (db) => {
-        console.log("Connected correctly to server");
-    },
-    (err) => {
-        console.log(err);
-    }
+  (db) => {
+    console.log("Connected correctly to server");
+  },
+  (err) => {
+    console.log(err);
+  }
 );
 
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
-    session({
-        name: "session-id",
-        secret: process.env.SESSION_SECRET,
-        saveUninitialized: false,
-        resave: false,
-        store: new FileStore({ logFn: function () {} }),
-    })
+  session({
+    name: "session-id",
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: false,
+    resave: false,
+    store: new FileStore({ logFn: function () {} }),
+  })
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cookieParser("12345-67890"));
+
+// add cors
+app.use(cors({ origin: "http://localhost:5173" }));
 
 // end of additional code
 app.use("/", indexRouter);
@@ -71,18 +75,18 @@ app.use("/export", exportRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next(createError(404));
+  next(createError(404));
 });
 
 // error handler
 app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get("env") === "development" ? err : {};
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
-    // render the error page
-    res.status(err.status || 500);
-    res.render("error");
+  // render the error page
+  res.status(err.status || 500);
+  res.render("error");
 });
 
 module.exports = app;
