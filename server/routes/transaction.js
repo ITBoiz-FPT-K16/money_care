@@ -138,28 +138,33 @@ transactionRouter.get("/:year/:month/detail", authenticate.verifyUser, async (re
                 }
             })
         }
-
-        expenses.forEach((e) => {
-            e.category.total = e.amount;
-            if (expenseList.some((expense) => expense._id.equals(e.category._id))) {
-                expenseList.find((expense) => expense._id.equals(e.category._id)).total += e.amount
+        let t = {};
+        for (let e of expenses) {
+            if (expenseList.some((category) => category._id.equals(e.category._id))) {
+                t[e.category._id] += e.amount;
             }
             else {
+                t[e.category._id] = e.amount;
                 expenseList.push(e.category);
             }
-        })
-
-        incomes.forEach((i) => {
-            i.category.total = i.amount;
-            if (incomeList.some((income) => income._id.equals(i.category._id))) {
-                incomeList.find((income) => income._id.equals(i.category._id)).total += i.amount;
+        }
+        for(let c of expenseList){
+            c.total = t[c._id];
+        }
+        t = {};
+        for (let i of incomes) {
+            if (incomeList.some((category) => category._id.equals(i.category._id))) {
+                t[i.category._id] += i.amount;
             }
             else {
+                t[i.category._id] = i.amount;
                 incomeList.push(i.category);
             }
-        })
-
-
+        }
+        for(let c of incomeList){
+            c.total = t[c._id];
+        }
+        
         res.json({
             totalExpenses: totalExpenses,
             totalIncomes: totalIncomes,
