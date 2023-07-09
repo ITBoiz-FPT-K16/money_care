@@ -12,6 +12,7 @@ import moment from "moment/moment";
 import { timeRangeOptions } from "./timeRangeOptions";
 import { useSelector } from "react-redux";
 import { currencyFormat } from "../../utils";
+import AddTransactionDialog from "./transactionsScreen/addTransaction/AddTransactionDialog";
 const Navbar = () => {
     const pathName = window.location.pathname;
     const dateToday = moment(new Date()).format("DD");
@@ -72,14 +73,7 @@ const Navbar = () => {
                         </div>
                     </Tooltip>
 
-                    <Button
-                        variant="contained"
-                        color="success"
-                        className="mx-2"
-                    >
-                        {" "}
-                        Add transaction
-                    </Button>
+                    <AddTransactionDialog />
                 </div>
             )}
 

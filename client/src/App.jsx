@@ -6,6 +6,7 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import 'chart.js/auto';
 
 // IMPORT COMPONENTS
 import HomeComponent from "./components/HomeScreens/HomeComponent.jsx";
@@ -13,6 +14,7 @@ import LoginComponent from "./components/loginScreen/LoginComponent";
 import RedirectPage from "./components/RedirectPage";
 import TransactionComponent from "./components/HomeScreens/transactionsScreen/TransactionComponent";
 import ReportComponent from "./components/HomeScreens/reportScreen/ReportComponent";
+import ExportExcelComponent from "./components/HomeScreens/exportScreen/ExportExcelComponent";
 
 function App() {
     return (
@@ -27,6 +29,7 @@ function App() {
 
                     {/* Define 1 route report o day */}
                     <Route path="report" element={<ReportComponent />} />
+                    <Route path="export" element={<ExportExcelComponent />} />
                 </Route>
                 <Route path="*" element={<h1>404</h1>} />
                 <Route path="/auth" element={<LoginComponent />} />
