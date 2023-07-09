@@ -45,7 +45,7 @@ const Sidebar = () => {
                 </NavLink>
 
                 <NavLink
-                    to="/"
+                    to="/home/export"
                     className={
                         "flex flex-col w-full justify-center items-center px-2 py-2 my-2  border-b-1 border-gray-300  hover:bg-gray-200"
                     }
@@ -57,7 +57,7 @@ const Sidebar = () => {
                 </NavLink>
 
                 <NavLink
-                    to="/"
+                    to="/home/store"
                     className={
                         "flex flex-col w-full justify-center items-center px-2 py-2 my-2  hover:bg-gray-200"
                     }
@@ -69,7 +69,7 @@ const Sidebar = () => {
                 </NavLink>
 
                 <NavLink
-                    to="/"
+                    to="home/help"
                     className={
                         "flex flex-col w-full justify-center items-center px-2 py-2 my-2  hover:bg-gray-200"
                     }

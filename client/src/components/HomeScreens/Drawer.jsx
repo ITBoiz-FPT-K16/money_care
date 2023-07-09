@@ -12,13 +12,15 @@ import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import { IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import { Logout } from "@mui/icons-material";
 
 import auth from "../../services/auth";
+import { logout } from "../../redux/authSlice";
 
 export default function SwipeableTemporaryDrawerIcon() {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [state, setState] = React.useState({
         top: false,
@@ -30,6 +32,7 @@ export default function SwipeableTemporaryDrawerIcon() {
 
     const handleLogout = () => {
         auth.signOut();
+        dispatch(logout());
         navigate("/auth");
     };
 
