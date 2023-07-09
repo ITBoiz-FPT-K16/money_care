@@ -7,6 +7,8 @@ import DAYS_IN_MONTH, { backgroundColorChart } from "../../../utils/string";
 import moment from "moment";
 import { Box } from "@mui/material";
 import { currencyFormat } from "../../../utils/index";
+import Modal from "@mui/material/Modal";
+
 const ReportComponent = () => {
   const [dateIncome, setDateIncome] = useState([]);
   const [dateExpense, setDateExpense] = useState([]);
@@ -18,7 +20,7 @@ const ReportComponent = () => {
   const [totalExpense, setTotalExpense] = useState();
 
   const [result, setResult] = useState();
-
+  const [isShowModal, setIsShowModal] = useState(false);
   const token = useSelector((state) => state.auth.auth.user.accessToken);
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -42,6 +44,7 @@ const ReportComponent = () => {
           return {
             name: object.name,
             value: object.total,
+            image: object.image,
           };
         });
         console.log(incomeCategoryArr);
@@ -49,6 +52,7 @@ const ReportComponent = () => {
           return {
             name: object.name,
             value: object.total,
+            image: object.image,
           };
         });
         setCategoryIncome(incomeCategoryArr);
@@ -58,8 +62,6 @@ const ReportComponent = () => {
         setDateIncome(dateIncomeArr);
         setDateExpense(dateExpenseArr);
         setResult(currencyFormat(data.totalIncomes - data.totalExpenses));
-
-        console.log(result);
       })
       .catch((err) => {
         console.log(err);
@@ -118,6 +120,19 @@ const ReportComponent = () => {
   };
   const openModal = () => {
     console.log("open modal");
+    setIsShowModal(!isShowModal);
+  };
+
+  const style = {
+    position: "relative",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 500,
+    bgcolor: "background.paper",
+    border: "2px solid #000",
+    boxShadow: 24,
+    p: 4,
   };
 
   return (
@@ -130,54 +145,101 @@ const ReportComponent = () => {
         >
           <div
             className="bg-white-secondary rounded-xl shadow-xl box-border overflow-auto relative"
-            style={{ width: "500px", height: "550px" }}
+            style={{ width: "600px", height: "600px" }}
           >
-            <Box>
-              <Box
-                sx={{
-                  borderBottom: 1,
-                  borderColor: "divider",
-                  backgroundColor: "#fff",
-                  borderRadius: "10px",
-                  position: "sticky",
-                  top: "2px",
-                }}
-              >
+            <Box
+              sx={{
+                borderBottom: 1,
+                borderColor: "divider",
+                backgroundColor: "#fff",
+                borderRadius: "10px",
+                position: "sticky",
+                top: "2px",
+              }}
+            >
+              <div className="hover:bg-lime-50 pb-2">
                 <div>
-                  <div>
-                    <h1 className="text-center text-2xl font-bold">
-                      Net Income
-                    </h1>
-                    <div className="flex justify-center items-center">
-                      <p>{result}</p>
-                    </div>
-                  </div>
-                  <div style={{ width: "90%", height: "90%" }}>
-                    <BarChart data={dateData} />
+                  <h1 className="text-center text-2xl font-bold pt-2">
+                    Net Income
+                  </h1>
+                  <div className="flex justify-center items-center">
+                    <p>{result}</p>
                   </div>
                 </div>
-                <div className="flex">
-                  <div className="w-1/2">
-                    <p className="text-center">Income</p>
-                    <p className="text-center font-bold text-blue-400">
-                      {totalIncome}
-                    </p>
-                    <div>
-                      <DoughnutChart data={incomeData} options={options} />
-                    </div>
+                <div onClick={openModal}>
+                  <BarChart data={dateData} />
+                </div>
+              </div>
+              <div className="flex border-t-2">
+                <div
+                  onClick={openModal}
+                  className="w-1/2 hover:bg-lime-50 border-x"
+                >
+                  <p className="text-center">Income</p>
+                  <p className="text-center font-bold text-blue-400">
+                    {totalIncome}
+                  </p>
+                  <div>
+                    <DoughnutChart data={incomeData} options={options} />
                   </div>
+                </div>
+                <div onClick={openModal} className="w-1/2 hover:bg-lime-50">
+                  <p className="text-center">Expense</p>
+                  <p className="text-center font-bold text-red-400">
+                    {totalExpense}
+                  </p>
+                  <div>
+                    <DoughnutChart data={expenseData} options={options} />
+                  </div>
+                </div>
+              </div>
+            </Box>
+
+            <Modal
+              open={isShowModal}
+              onClose={openModal}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <div className="flex items-center justify-center pb-2">
+                  <h4 className="text-center text-2xl font-bold pt-2">
+                    Expense
+                  </h4>
                   <div className="w-1/2">
-                    <p className="text-center">Expense</p>
-                    <p className="text-center font-bold text-red-400">
-                      {totalExpense}
-                    </p>
                     <div>
                       <DoughnutChart data={expenseData} options={options} />
                     </div>
                   </div>
+                  <div className="w-1/2">
+                    <p className="text-center font-bold text-red-400">
+                      {totalExpense}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <>
+                    {/* <DetailComponent array={categoryExpense} /> */}
+                    <>
+                      {categoryExpense?.map((object, index) => {
+                        console.log(object);
+                        console.log(object.image);
+                        return (
+                          <div key={index} className="flex justify-between">
+                            <div className="w-14 h-14">
+                              <img src={object.image} alt={object.name} />
+                            </div>
+                            <p>{object.name}</p>
+
+                            <p className="text-red-400">{object.value}</p>
+                          </div>
+                        );
+                      })}
+                    </>
+                  </>
                 </div>
               </Box>
-            </Box>
+            </Modal>
           </div>
         </div>
       </>
