@@ -1,15 +1,19 @@
 import Navbar from "../Navbar";
 import { BarChart, DoughnutChart } from "./ChartComponent";
-import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import DAYS_IN_MONTH, { backgroundColorChart } from "../../../utils/string";
-import moment from "moment";
 import { Box } from "@mui/material";
 import { currencyFormat } from "../../../utils/index";
 import Modal from "@mui/material/Modal";
+import { timeRangeOptions } from "../timeRangeOptions";
+import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import * as reportAction from "../../../redux/reportSlice";
 
 const ReportComponent = () => {
+  const dispatch = useDispatch();
+
   const [dateIncome, setDateIncome] = useState([]);
   const [dateExpense, setDateExpense] = useState([]);
 
@@ -20,22 +24,26 @@ const ReportComponent = () => {
   const [totalExpense, setTotalExpense] = useState();
 
   const [result, setResult] = useState();
+  const [timeRange, setTimeRange] = useState(timeRangeOptions[0]);
+
   const [isShowModal, setIsShowModal] = useState(false);
   const token = useSelector((state) => state.auth.auth.user.accessToken);
+  const data = useSelector((state) => state.reportTransaction.reportInfo);
   const API_URL = import.meta.env.VITE_API_URL;
 
-  const timeThisMonth = moment(new Date()).format("YYYY/MM");
-
+  const timeThisMonth = moment(timeRange.startDate).format("YYYY/MM");
   useEffect(() => {
     axios
-      .get(`${API_URL}/transactions/${timeThisMonth}/detail`, {
+      .get(`${API_URL}/transactions/${timeRange.monthYear}/detail`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
-        const data = res.data;
-        console.log(data);
+        dispatch(reportAction.getReportStart());
+
+        dispatch(reportAction.getReportSuccess(res.data));
+
         const dateIncomeArr = data.dateInMonth.map((date) => date.totalIncomes);
         const dateExpenseArr = data.dateInMonth.map(
           (date) => -Math.abs(date.totalExpenses)
@@ -47,7 +55,6 @@ const ReportComponent = () => {
             image: object.image,
           };
         });
-        console.log(incomeCategoryArr);
         const expenseCategoryArr = data.expenseList.map((object) => {
           return {
             name: object.name,
@@ -64,10 +71,11 @@ const ReportComponent = () => {
         setResult(currencyFormat(data.totalIncomes - data.totalExpenses));
       })
       .catch((err) => {
+        dispatch(reportAction.getReportFail(err));
         console.log(err);
       });
-  }, [token]);
-
+  }, [timeRange.monthYear]);
+  console.log(data);
   //Data show in months
   const dateData = {
     labels: DAYS_IN_MONTH,
@@ -136,114 +144,116 @@ const ReportComponent = () => {
   };
 
   return (
-    <div className="pl-20 h-100%">
-      <>
-        <Navbar />
-        <div
-          className="flex justify-center items-center"
-          style={{ height: "100vh" }}
-        >
-          <div
-            className="bg-white-secondary rounded-xl shadow-xl box-border overflow-auto relative"
-            style={{ width: "600px", height: "600px" }}
-          >
-            <Box
-              sx={{
-                borderBottom: 1,
-                borderColor: "divider",
-                backgroundColor: "#fff",
-                borderRadius: "10px",
-                position: "sticky",
-                top: "2px",
-              }}
+    <>
+      {data.dateInMonth.length > 0 && (
+        <div className="pl-20 h-100%">
+          <>
+            <Navbar />
+            <div
+              className="flex justify-center items-center"
+              style={{ height: "100vh" }}
             >
-              <div className="hover:bg-lime-50 pb-2">
-                <div>
-                  <h1 className="text-center text-2xl font-bold pt-2">
-                    Net Income
-                  </h1>
-                  <div className="flex justify-center items-center">
-                    <p>{result}</p>
-                  </div>
-                </div>
-                <div onClick={openModal}>
-                  <BarChart data={dateData} />
-                </div>
-              </div>
-              <div className="flex border-t-2">
-                <div
-                  onClick={openModal}
-                  className="w-1/2 hover:bg-lime-50 border-x"
+              <div
+                className="bg-white-secondary rounded-xl shadow-xl box-border overflow-auto relative"
+                style={{ width: "600px", height: "600px" }}
+              >
+                <Box
+                  sx={{
+                    borderBottom: 1,
+                    borderColor: "divider",
+                    backgroundColor: "#fff",
+                    borderRadius: "10px",
+                    position: "sticky",
+                    top: "2px",
+                  }}
                 >
-                  <p className="text-center">Income</p>
-                  <p className="text-center font-bold text-blue-400">
-                    {totalIncome}
-                  </p>
-                  <div>
-                    <DoughnutChart data={incomeData} options={options} />
-                  </div>
-                </div>
-                <div onClick={openModal} className="w-1/2 hover:bg-lime-50">
-                  <p className="text-center">Expense</p>
-                  <p className="text-center font-bold text-red-400">
-                    {totalExpense}
-                  </p>
-                  <div>
-                    <DoughnutChart data={expenseData} options={options} />
-                  </div>
-                </div>
-              </div>
-            </Box>
-
-            <Modal
-              open={isShowModal}
-              onClose={openModal}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              <Box sx={style}>
-                <div className="flex items-center justify-center pb-2">
-                  <h4 className="text-center text-2xl font-bold pt-2">
-                    Expense
-                  </h4>
-                  <div className="w-1/2">
+                  <div className="hover:bg-lime-50 pb-2">
                     <div>
-                      <DoughnutChart data={expenseData} options={options} />
+                      <h1 className="text-center text-2xl font-bold pt-2">
+                        Net Income
+                      </h1>
+                      <div className="flex justify-center items-center">
+                        <p>{result}</p>
+                      </div>
+                    </div>
+                    <div onClick={openModal}>
+                      <BarChart data={dateData} />
                     </div>
                   </div>
-                  <div className="w-1/2">
-                    <p className="text-center font-bold text-red-400">
-                      {totalExpense}
-                    </p>
+                  <div className="flex border-t-2">
+                    <div
+                      onClick={openModal}
+                      className="w-1/2 hover:bg-lime-50 border-x"
+                    >
+                      <p className="text-center">Income</p>
+                      <p className="text-center font-bold text-blue-400">
+                        {totalIncome}
+                      </p>
+                      <div>
+                        <DoughnutChart data={incomeData} options={options} />
+                      </div>
+                    </div>
+                    <div onClick={openModal} className="w-1/2 hover:bg-lime-50">
+                      <p className="text-center">Expense</p>
+                      <p className="text-center font-bold text-red-400">
+                        {totalExpense}
+                      </p>
+                      <div>
+                        <DoughnutChart data={expenseData} options={options} />
+                      </div>
+                    </div>
                   </div>
-                </div>
-                <div>
-                  <>
-                    {/* <DetailComponent array={categoryExpense} /> */}
-                    <>
-                      {categoryExpense?.map((object, index) => {
-                        console.log(object);
-                        console.log(object.image);
-                        return (
-                          <div key={index} className="flex justify-between">
-                            <div className="w-14 h-14">
-                              <img src={object.image} alt={object.name} />
-                            </div>
-                            <p>{object.name}</p>
+                </Box>
 
-                            <p className="text-red-400">{object.value}</p>
-                          </div>
-                        );
-                      })}
-                    </>
-                  </>
-                </div>
-              </Box>
-            </Modal>
-          </div>
+                <Modal
+                  open={isShowModal}
+                  onClose={openModal}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={style}>
+                    <div className="flex items-center justify-center pb-2">
+                      <h4 className="text-center text-2xl font-bold pt-2">
+                        Expense
+                      </h4>
+                      <div className="w-1/2">
+                        <div>
+                          <DoughnutChart data={expenseData} options={options} />
+                        </div>
+                      </div>
+                      <div className="w-1/2">
+                        <p className="text-center font-bold text-red-400">
+                          {totalExpense}
+                        </p>
+                      </div>
+                    </div>
+                    <div>
+                      <>
+                        {/* <DetailComponent array={categoryExpense} /> */}
+                        <>
+                          {categoryExpense?.map((object, index) => {
+                            return (
+                              <div key={index} className="flex justify-between">
+                                <div className="w-14 h-14">
+                                  <img src={object.image} alt={object.name} />
+                                </div>
+                                <p>{object.name}</p>
+
+                                <p className="text-red-400">{object.value}</p>
+                              </div>
+                            );
+                          })}
+                        </>
+                      </>
+                    </div>
+                  </Box>
+                </Modal>
+              </div>
+            </div>
+          </>
         </div>
-      </>
-    </div>
+      )}
+    </>
   );
 };
 
