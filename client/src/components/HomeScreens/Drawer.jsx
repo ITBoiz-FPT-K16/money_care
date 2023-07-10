@@ -10,7 +10,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import { IconButton } from "@mui/material";
+import { Avatar, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -29,6 +29,7 @@ export default function SwipeableTemporaryDrawerIcon() {
         right: false,
     });
     const currentUser = useSelector((state) => state.auth.auth.user);
+    console.log("currentUser", currentUser);
 
     const handleLogout = () => {
         auth.signOut();
@@ -58,13 +59,20 @@ export default function SwipeableTemporaryDrawerIcon() {
             onKeyDown={toggleDrawer(anchor, false)}
         >
             <div className="flex flex-col items-center my-10">
-                <div className="w-16 h-16">
-                    <img
-                        src={currentUser.userImg}
-                        alt="user image"
-                        className="rounded-full"
-                    />
-                </div>
+                {!currentUser.userImg ? (
+                    <div>
+                        <Avatar sx={{ height: "64px", width: "64px" }}></Avatar>
+                    </div>
+                ) : (
+                    <div className="w-16 h-16">
+                        <img
+                            src={currentUser.userImg}
+                            alt="user image"
+                            className="rounded-full"
+                        />
+                    </div>
+                )}
+
                 <div className="mt-2">
                     <strong>{currentUser.name}</strong>
                 </div>

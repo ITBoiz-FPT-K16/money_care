@@ -84,7 +84,6 @@ const TransactionsListComponent = (props) => {
                                         getTransactionsOftMonth(timeThisMonth);
                                     }}
                                 />
-                                <Tab label="Future" value="3" />
                             </TabList>
                         </Box>
                         <TabPanel value="1" sx={{ padding: "0px" }}>
@@ -92,29 +91,8 @@ const TransactionsListComponent = (props) => {
                                 <LoadingTransaction />
                             )}
 
-                            {!transactionInfo.isFetching && (
-                                <>
-                                    <MoneyFlowComponent />
-                                    {transactionInfo?.categories?.map(
-                                        (item, index) => {
-                                            return (
-                                                <CategoryComponent
-                                                    key={index}
-                                                    category={item}
-                                                />
-                                            );
-                                        }
-                                    )}
-                                </>
-                            )}
-                        </TabPanel>
-                        <TabPanel value="2" sx={{ padding: "0px" }}>
-                            <div className="box-border">
-                                {transactionInfo.isFetching && (
-                                    <LoadingTransaction />
-                                )}
-
-                                {!transactionInfo.isFetching && (
+                            {!transactionInfo.isFetching &&
+                                transactionInfo?.categories?.length > 0 && (
                                     <>
                                         <MoneyFlowComponent />
                                         {transactionInfo?.categories?.map(
@@ -129,14 +107,48 @@ const TransactionsListComponent = (props) => {
                                         )}
                                     </>
                                 )}
-                            </div>
+
+                            {transactionInfo?.categories == 0 && (
+                                <div className="flex flex-col justify-center items-center">
+                                    <img
+                                        src={dataNotFound}
+                                        alt="data not found"
+                                        width="400px"
+                                        height="400px"
+                                    />
+                                    <h2>Data Not Found</h2>
+                                </div>
+                            )}
                         </TabPanel>
-                        <TabPanel value="3" className="bg-white-primary">
-                            <div className="h-100% ">
-                                <img src={dataNotFound} alt="" />
-                            </div>
-                            <div>
-                                <h3 className="text-center">Data not found</h3>
+                        <TabPanel value="2" sx={{ padding: "0px" }}>
+                            <div className="box-border">
+                                {transactionInfo.isFetching && (
+                                    <LoadingTransaction />
+                                )}
+
+                                {!transactionInfo.isFetching &&
+                                    transactionInfo?.categories?.length > 0 && (
+                                        <>
+                                            <MoneyFlowComponent />
+                                            {transactionInfo?.categories?.map(
+                                                (item, index) => {
+                                                    return (
+                                                        <CategoryComponent
+                                                            key={index}
+                                                            category={item}
+                                                        />
+                                                    );
+                                                }
+                                            )}
+                                        </>
+                                    )}
+
+                                {transactionInfo?.categories?.length === 0 &&
+                                    transactionInfo.isFetching === false && (
+                                        <div>
+                                            <h1>No data</h1>
+                                        </div>
+                                    )}
                             </div>
                         </TabPanel>
                     </TabContext>
