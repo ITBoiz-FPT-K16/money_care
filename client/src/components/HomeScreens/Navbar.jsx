@@ -4,12 +4,8 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 // IMPORT ICONS
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import SearchIcon from "@mui/icons-material/Search";
-import EventIcon from "@mui/icons-material/Event";
 import { Button, IconButton, Tooltip } from "@mui/material";
-import moment from "moment/moment";
-import { timeRangeOptions } from "./timeRangeOptions";
+import moment from "moment";
 import { useSelector } from "react-redux";
 import { currencyFormat } from "../../utils";
 import AddTransactionDialog from "./transactionsScreen/addTransaction/AddTransactionDialog";
@@ -50,10 +46,10 @@ const Navbar = () => {
             let res;
             let resetTimeRange;
             if (timeRange == "THISMONTH") {
-                const dayStart = moment(month)
+                const dayStart = moment(thisMonth)
                     .startOf("month")
                     .format("YYYY/MM/DD");
-                const dayEnd = moment(month)
+                const dayEnd = moment(thisMonth)
                     .endOf("month")
                     .format("YYYY/MM/DD");
                 const desc = "this month";
