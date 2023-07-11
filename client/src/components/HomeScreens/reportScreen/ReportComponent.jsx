@@ -25,7 +25,7 @@ const ReportComponent = () => {
     const [totalExpense, setTotalExpense] = useState();
 
     const [result, setResult] = useState();
-    const [timeRange, setTimeRange] = useState(timeRangeOptions[0]);
+    const timeRange = useSelector((state) => state.reportTransaction.timeRange);
 
     const [incomeData, setIncomeData] = useState({});
     const [expenseData, setExpenseData] = useState({});
@@ -38,11 +38,10 @@ const ReportComponent = () => {
     const [isIncomeModal, setIsIncomeModal] = useState(false);
     const token = useSelector((state) => state.auth.auth.user.accessToken);
     const data = useSelector((state) => state.reportTransaction.reportInfo);
-    const timeThisMonth = moment(timeRange.startDate).format("YYYY/MM");
 
     const fetchData = async () => {
         dispatch(reportAction.getReportStart());
-        const res = await getTransactionDetail("2023/07", token);
+        const res = await getTransactionDetail(timeRange, token);
         if (res.errCode == 0) {
             console.log("res.data", res.data);
 
@@ -83,7 +82,7 @@ const ReportComponent = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [timeRange]);
 
     useEffect(() => {
         const incomeData = {
@@ -128,7 +127,7 @@ const ReportComponent = () => {
         setIncomeData(incomeData);
         setExpenseData(expenseData);
         setDateData(dateData);
-    }, [categoryIncome, categoryExpense]);
+    }, [categoryIncome, categoryExpense, timeRange]);
 
     console.log("incomeData", incomeData);
     console.log("expenseData", expenseData);
