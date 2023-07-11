@@ -47,105 +47,107 @@ const ExportExcelComponent = () => {
     return (
         <div className="h-100vh pl-20">
             <Navbar />
-            <div className=" p-10 grid grid-cols-1 md:grid-cols-3  gap-8">
-                <div className="bg-white-primary col-span-1 flex flex-col items-center justify-center rounded-md box-border">
-                    <div className="flex justify-center items-center p-5">
-                        <img
-                            src={excelIcon}
-                            alt=""
-                            width={"80px"}
-                            height={"80px"}
-                        />
-                        <h3>Export by month</h3>
-                    </div>
+            <div className="h-100 bg-white-secondary">
+                <div className=" p-10 grid grid-cols-1 md:grid-cols-3  gap-8">
+                    <div className="bg-white-primary col-span-1 flex flex-col items-center justify-center rounded-md box-border shadow-lg">
+                        <div className="flex justify-center items-center p-5">
+                            <img
+                                src={excelIcon}
+                                alt=""
+                                width={"80px"}
+                                height={"80px"}
+                            />
+                            <h3>Export by month</h3>
+                        </div>
 
-                    <div>
-                        <TextField
-                            variant="outlined"
-                            size="small"
-                            label={"Input month"}
-                            placeholder="YYYY/MM"
-                            value={month}
-                            onChange={handleOnchangeMonth}
-                        />
-                    </div>
-                    <div className="p-5">
-                        <Button
-                            variant="contained"
-                            color="success"
-                            onClick={handleExportByMonth}
-                            disabled={
-                                month.length !== 7 ||
-                                isNaN(month.slice(0, 4)) ||
-                                isNaN(month.slice(5, 7))
-                            }
-                        >
-                            <FileDownloadIcon />
-                            Export
-                        </Button>
-                    </div>
+                        <div>
+                            <TextField
+                                variant="outlined"
+                                size="small"
+                                label={"Input month"}
+                                placeholder="YYYY/MM"
+                                value={month}
+                                onChange={handleOnchangeMonth}
+                            />
+                        </div>
+                        <div className="p-5">
+                            <Button
+                                variant="contained"
+                                color="success"
+                                onClick={handleExportByMonth}
+                                disabled={
+                                    month.length !== 7 ||
+                                    isNaN(month.slice(0, 4)) ||
+                                    isNaN(month.slice(5, 7))
+                                }
+                            >
+                                <FileDownloadIcon />
+                                Export
+                            </Button>
+                        </div>
 
-                    <div></div>
-                </div>
-                <div className="bg-white-primary col-span-1 flex flex-col items-center justify-center rounded-md box-border">
-                    <div className="flex justify-center items-center p-5">
-                        <img
-                            src={excelIcon}
-                            alt=""
-                            width={"80px"}
-                            height={"80px"}
-                        />
-                        <h3>Export by year</h3>
+                        <div></div>
                     </div>
+                    <div className="bg-white-primary col-span-1 flex flex-col items-center justify-center rounded-md box-border shadow-lg">
+                        <div className="flex justify-center items-center p-5">
+                            <img
+                                src={excelIcon}
+                                alt=""
+                                width={"80px"}
+                                height={"80px"}
+                            />
+                            <h3>Export by year</h3>
+                        </div>
 
-                    <div>
-                        <TextField
-                            variant="outlined"
-                            size="small"
-                            label={"Input year"}
-                            placeholder="YYYY"
-                            value={year}
-                            onChange={handleOnchangeYear}
-                        />
-                    </div>
-                    <div className="p-5">
-                        <Button
-                            variant="contained"
-                            color="success"
-                            onClick={handleExportByYear}
-                            disabled={year.length !== 4 || isNaN(year)}
-                        >
-                            <FileDownloadIcon />
-                            Export
-                        </Button>
-                    </div>
+                        <div>
+                            <TextField
+                                variant="outlined"
+                                size="small"
+                                label={"Input year"}
+                                placeholder="YYYY"
+                                value={year}
+                                onChange={handleOnchangeYear}
+                            />
+                        </div>
+                        <div className="p-5">
+                            <Button
+                                variant="contained"
+                                color="success"
+                                onClick={handleExportByYear}
+                                disabled={year.length !== 4 || isNaN(year)}
+                            >
+                                <FileDownloadIcon />
+                                Export
+                            </Button>
+                        </div>
 
-                    <div></div>
-                </div>
-                <div className="bg-white-primary col-span-1 flex flex-col items-center justify-center rounded-md box-border">
-                    <div className="flex justify-center items-center p-5">
-                        <img
-                            src={excelIcon}
-                            alt=""
-                            width={"80px"}
-                            height={"80px"}
-                        />
-                        <h3>Export all</h3>
+                        <div></div>
                     </div>
+                    <div className="bg-white-primary col-span-1 flex flex-col items-center justify-center rounded-md box-border shadow-lg">
+                        <div className="flex justify-center items-center p-5">
+                            <img
+                                src={excelIcon}
+                                alt=""
+                                width={"80px"}
+                                height={"80px"}
+                            />
+                            <h3>Export all</h3>
+                        </div>
 
-                    <div></div>
-                    <div className="p-5">
-                        <Button
-                            variant="contained"
-                            color="success"
-                            onClick={handleExportAll}
-                        >
-                            <FileDownloadIcon />
-                            Export
-                        </Button>
+                        <div></div>
+                        <div className="p-5">
+                            <Button
+                                variant="contained"
+                                color="success"
+                                onClick={handleExportAll}
+                            >
+                                <FileDownloadIcon />
+                                Export
+                            </Button>
+                        </div>
+
+                        <div></div>
                     </div>
-
-                    <div></div>
                 </div>
             </div>
         </div>
