@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getTransactionDetail } from "../../../services/reportService";
 import * as reportAction from "../../../redux/reportSlice";
 import { toast } from "react-toastify";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const ReportComponent = () => {
     const dispatch = useDispatch();
@@ -37,11 +38,10 @@ const ReportComponent = () => {
     const [modalTotal, setModalTotal] = useState();
     const [isIncomeModal, setIsIncomeModal] = useState(false);
     const token = useSelector((state) => state.auth.auth.user.accessToken);
-    const data = useSelector((state) => state.reportTransaction.reportInfo);
 
     const fetchData = async () => {
         dispatch(reportAction.getReportStart());
-        const res = await getTransactionDetail(timeRange, token);
+        const res = await getTransactionDetail(timeRange.month, token);
         if (res.errCode == 0) {
             console.log("res.data", res.data);
 
@@ -173,8 +173,8 @@ const ReportComponent = () => {
         transform: "translate(-50%, -50%)",
         width: 500,
         bgcolor: "background.paper",
-        border: "2px solid #000",
         boxShadow: 24,
+        borderRadius: "10px",
         p: 4,
     };
 
@@ -189,7 +189,7 @@ const ReportComponent = () => {
                     >
                         <div
                             className="bg-white-secondary rounded-xl shadow-xl box-border overflow-auto relative"
-                            style={{ width: "600px", height: "600px" }}
+                            style={{ width: "700px" }}
                         >
                             <Box
                                 sx={{
@@ -211,7 +211,10 @@ const ReportComponent = () => {
                                         </div>
                                     </div>
                                     {Object.keys(dateData).length > 0 && (
-                                        <div onClick={openModalTotal}>
+                                        <div
+                                            onClick={openModalTotal}
+                                            className="flex justify-center"
+                                        >
                                             <BarChart data={dateData} />
                                         </div>
                                     )}
@@ -246,7 +249,7 @@ const ReportComponent = () => {
 
                                         {Object.keys(expenseData).length >
                                             0 && (
-                                            <div>
+                                            <div className="flex justify-center">
                                                 <DoughnutChart
                                                     data={expenseData}
                                                     options={options}
@@ -255,16 +258,7 @@ const ReportComponent = () => {
                                         )}
 
                                         {Object.keys(expenseData).length ==
-                                            0 && (
-                                            <div>
-                                                <h2>
-                                                    {" "}
-                                                    nếu không có dữ liệu thì nó
-                                                    display dòng này rồi Chắc hư
-                                                    bên chart
-                                                </h2>
-                                            </div>
-                                        )}
+                                            0 && <CircularProgress />}
                                     </div>
                                 </div>
                             </Box>

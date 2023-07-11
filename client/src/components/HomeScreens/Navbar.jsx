@@ -29,7 +29,8 @@ const Navbar = () => {
     const dispatch = useDispatch();
     const pathName = window.location.pathname;
     const dateToday = moment(new Date()).format("DD");
-    const [rangeTime, setRangeTime] = useState(timeRangeOptions[0]);
+    // const [rangeTime, setRangeTime] = useState(timeRangeOptions[0]);
+    const rangeTime = useSelector((state) => state.reportTransaction.timeRange);
     const totalAmount = useSelector(
         (state) => state.auth.auth.user.totalAmount
     );
@@ -45,13 +46,50 @@ const Navbar = () => {
     };
     const handleChangeTimeRange = async (timeRange) => {
         try {
-            setRangeTime(timeRange);
-            dispatch(getReportStart);
-            const res = await getTransactionDetail(timeRange.monthYear, token);
+            const thisMonth = moment(new Date()).format("YYYY/MM");
+            let res;
+            let resetTimeRange;
+            if (timeRange == "THISMONTH") {
+                const dayStart = moment(month)
+                    .startOf("month")
+                    .format("YYYY/MM/DD");
+                const dayEnd = moment(month)
+                    .endOf("month")
+                    .format("YYYY/MM/DD");
+                const desc = "this month";
+                resetTimeRange = {
+                    month: thisMonth,
+                    dayStart,
+                    dayEnd,
+                    desc,
+                };
+                res = await getTransactionDetail(thisMonth, token);
+            } else {
+                const lastMonth = moment(thisMonth)
+                    .subtract(1, "months")
+                    .format("YYYY/MM");
+                const dayStart = moment(lastMonth)
+                    .startOf("month")
+                    .format("YYYY/MM/DD");
+                const dayEnd = moment(lastMonth)
+                    .endOf("month")
+                    .format("YYYY/MM/DD");
+                const desc = "last month";
+                resetTimeRange = {
+                    month: lastMonth,
+                    dayStart,
+                    dayEnd,
+                    desc,
+                };
+                res = await getTransactionDetail(lastMonth, token);
+            }
+
             if (res.errCode == 0) {
                 dispatch(getReportSuccess(res.data));
-                dispatch(setTimeRangeReport(timeRange.monthYear));
+                dispatch(setTimeRangeReport(resetTimeRange));
                 handleClose();
+            } else {
+                dispatch(getReportFailure());
             }
         } catch (error) {
             console.log("err>>", error);
@@ -122,7 +160,7 @@ const Navbar = () => {
                             onClick={handleClick}
                         >
                             <div className="flex items-center justify-center">
-                                <strong>{rangeTime.description}</strong>
+                                <strong>{rangeTime.desc}</strong>
                                 <ArrowDropDownIcon />
                             </div>
                         </Button>
@@ -135,21 +173,26 @@ const Navbar = () => {
                                 "aria-labelledby": "basic-button",
                             }}
                         >
-                            {timeRangeOptions.map((timeRange, index) => (
-                                <MenuItem
-                                    key={index}
-                                    onClick={() => {
-                                        handleChangeTimeRange(timeRange);
-                                    }}
-                                >
-                                    {timeRange.description}
-                                </MenuItem>
-                            ))}
+                            <MenuItem
+                                onClick={() => {
+                                    handleChangeTimeRange("THISMONTH");
+                                }}
+                            >
+                                {"This month"}
+                            </MenuItem>
+
+                            <MenuItem
+                                onClick={() => {
+                                    handleChangeTimeRange("LASTMONTH");
+                                }}
+                            >
+                                {"Last month"}
+                            </MenuItem>
                         </Menu>
                     </div>
                     <div className="text-xs">
                         <span>
-                            {rangeTime.startDate} - {rangeTime.endDate}
+                            {rangeTime.dayStart} - {rangeTime.dayEnd}
                         </span>
                     </div>
                 </div>

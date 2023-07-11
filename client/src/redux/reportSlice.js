@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import moment from "moment";
-const thisMonth = moment(new Date()).format("YYYY/MM");
+const month = moment(new Date()).format("YYYY/MM");
+const dayStart = moment(month).startOf("month").format("YYYY/MM/DD");
+const dayEnd = moment(month).endOf("month").format("YYYY/MM/DD");
+const desc = "this month";
 const initialState = {
     reportInfo: {
         dateInMonth: [],
@@ -9,7 +12,12 @@ const initialState = {
         totalExpenses: 0,
         totalIncomes: 0,
     },
-    timeRange: thisMonth,
+    timeRange: {
+        month: month,
+        dayStart: dayStart,
+        dayEnd: dayEnd,
+        desc: desc,
+    },
 
     isFetching: false,
     error: false,
