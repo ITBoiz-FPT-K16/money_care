@@ -99,7 +99,10 @@ const Navbar = () => {
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
             >
-              {timeRangeOptions.description} <ArrowDropDownIcon />
+              <div>
+                <strong>{rangeTime.description}</strong>
+                {timeRangeOptions.description} <ArrowDropDownIcon />
+              </div>
             </Button>
             <Menu
               id="basic-menu"
@@ -118,7 +121,6 @@ const Navbar = () => {
 
               {/* <MenuItem onClick={handleClose}>Profile</MenuItem> */}
             </Menu>
-            <strong>{rangeTime.description}</strong>
           </div>
           <div className="text-xs">
             <span>
