@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import coverPhoto from "../../assets/images/cover-photo.jpg";
-
+import logo from "../../assets/images/logo-no-background.png";
 import moment from "moment";
 import { getTotalAmount } from "../../services/authService";
 const uiConfig = {
@@ -93,25 +93,34 @@ const LoginComponent = () => {
                             <div
                                 className="col-span-2 rounded-tr-lg rounded-br-lg h-100% text-center"
                                 style={{
-                                    backgroundColor: "#FBFFDC",
+                                    backgroundColor: "#31C48D",
                                 }}
                             >
-                                <div className="p-5">
+                                <div className="p-5 flex-col items-center justify-center">
+                                    <div className=" flex items-center justify-center">
+                                        <img
+                                            src={logo}
+                                            alt="logo"
+                                            width={"100px"}
+                                            height={"100px"}
+                                        />
+                                    </div>
                                     <h3
                                         className="text-center my-3 title"
-                                        style={{ color: "#F24C3D" }}
+                                        style={{ color: "white" }}
                                     >
-                                        Login Page
+                                        <strong>Welcome to MoneyCare </strong>
                                     </h3>
+
                                     <StyledFirebaseAuth
                                         uiConfig={uiConfig}
                                         firebaseAuth={auth}
                                     />
-                                    <p>
+                                    <strong className="text-white">
                                         You care about your money?
                                         <br />
-                                        We care about you
-                                    </p>
+                                        We care about your money too!
+                                    </strong>
                                 </div>
                             </div>
                         </div>
