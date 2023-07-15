@@ -140,7 +140,7 @@ const Navbar = () => {
                         </div>
                     </Tooltip> */}
 
-                    <AddTransactionDialog />
+                    <AddTransactionDialog type={"add"} />
                 </div>
             )}
 

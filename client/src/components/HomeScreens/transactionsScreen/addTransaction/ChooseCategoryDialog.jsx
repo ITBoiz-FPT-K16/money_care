@@ -14,7 +14,8 @@ import { Divider } from "@mui/material";
 import { categories } from "../../../../../../categories";
 
 const ChooseCategoryDialog = (props) => {
-    const { open, handleClose, setCategory } = props;
+    const { open, handleClose, setCategory, type } = props;
+    const [typeTransaction, setTypeTransaction] = React.useState("all");
     const [tabValue, setTabValue] = React.useState("1");
     const handleChange = (event, newValue) => {
         setTabValue(newValue);
@@ -30,6 +31,20 @@ const ChooseCategoryDialog = (props) => {
         setCategory(category);
         handleClose();
     };
+
+    React.useEffect(() => {
+        if (type === undefined) {
+            setTypeTransaction("all");
+        } else {
+            type === true
+                ? setTypeTransaction("income")
+                : setTypeTransaction("expense");
+
+            type === true ? setTabValue("2") : setTabValue("1");
+        }
+    }, [type]);
+
+    console.log("type>>", typeTransaction);
 
     return (
         <div>
@@ -61,9 +76,22 @@ const ChooseCategoryDialog = (props) => {
                                         aria-label="lab API tabs example"
                                         centered
                                     >
-                                        <Tab label="EXPENSE" value="1"></Tab>
+                                        {typeTransaction === "all" && (
+                                            <Tab label="EXPENSE" value="1" />
+                                        )}
+                                        {typeTransaction === "all" && (
+                                            <Tab label="INCOME" value="2" />
+                                        )}
+                                        {typeTransaction === "expense" && (
+                                            <Tab
+                                                label="EXPENSE"
+                                                value="1"
+                                            ></Tab>
+                                        )}
 
-                                        <Tab label="INCOME" value="2" />
+                                        {typeTransaction === "income" && (
+                                            <Tab label="INCOME" value="2" />
+                                        )}
                                     </TabList>
                                 </Box>
                                 <TabPanel value="1" sx={{ padding: "20px" }}>
