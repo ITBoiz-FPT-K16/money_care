@@ -21,6 +21,7 @@ import {
 import { getTotalAmount } from "../../../services/authService";
 import { getTransactionsByTimeRange } from "../../../services/transactionSerVice";
 import { useDispatch } from "react-redux";
+
 const CategoryComponent = (props) => {
     const dispatch = useDispatch();
     const token = useSelector((state) => state.auth.auth.user.accessToken);
@@ -93,15 +94,27 @@ const CategoryComponent = (props) => {
 
     const handleDeleteTransaction = async () => {
         console.log("delete transaction");
-        const res1 = await deleteTransactionExpenses(
-            transactionWillDelete._id,
-            token
-        );
-        const res2 = await deleteTransactionIncomes(
-            transactionWillDelete._id,
-            token
-        );
-        if (res1.errCode === 0 || res2.errCode === 0) {
+        let type;
+        let res;
+        for (const category of categories) {
+            if (category._id === transactionWillDelete.category) {
+                type = category.type;
+                break;
+            }
+        }
+        if (type) {
+            res = await deleteTransactionIncomes(
+                transactionWillDelete._id,
+                token
+            );
+        } else {
+            res = await deleteTransactionExpenses(
+                transactionWillDelete._id,
+                token
+            );
+        }
+
+        if (res.errCode === 0) {
             console.log("delete success");
             toast.success("Delete transaction success");
             const timeThisMonth = moment(new Date()).format("YYYY/MM");

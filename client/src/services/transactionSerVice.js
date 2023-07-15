@@ -89,7 +89,7 @@ export const updateTransactionIncome = async (data, token) => {
             message: "Update transaction successfully",
         };
     } catch (error) {
-        return { errCode: 1, data: null, message: error.response.data.message };
+        return { errCode: 1, data: null, message: error.message };
     }
 };
 
@@ -105,7 +105,7 @@ export const deleteTransactionExpenses = async (id, token) => {
             message: "Delete transaction successfully",
         };
     } catch (error) {
-        return { errCode: 1, data: null, message: error.response.data.message };
+        return { errCode: 1, data: null, message: error.message };
     }
 };
 
@@ -121,6 +121,6 @@ export const deleteTransactionIncomes = async (id, token) => {
             message: "Delete transaction successfully",
         };
     } catch (error) {
-        return { errCode: 1, data: null, message: error.response.data.message };
+        return { errCode: 1, data: null, message: error.message };
     }
 };
