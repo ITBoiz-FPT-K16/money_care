@@ -6,7 +6,7 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import 'chart.js/auto';
+import "chart.js/auto";
 
 // IMPORT COMPONENTS
 import HomeComponent from "./components/HomeScreens/HomeComponent.jsx";
@@ -17,38 +17,35 @@ import ReportComponent from "./components/HomeScreens/reportScreen/ReportCompone
 import ExportExcelComponent from "./components/HomeScreens/exportScreen/ExportExcelComponent";
 
 function App() {
-    return (
-        <>
-            <Routes>
-                <Route path="/" element={<RedirectPage />} />
-                <Route path="/home" element={<HomeComponent />}>
-                    <Route
-                        path="transactions"
-                        element={<TransactionComponent />}
-                    />
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<RedirectPage />} />
+        <Route path="/home" element={<HomeComponent />}>
+          <Route path="transactions" element={<TransactionComponent />} />
 
-                    {/* Define 1 route report o day */}
-                    <Route path="report" element={<ReportComponent />} />
-                    <Route path="export" element={<ExportExcelComponent />} />
-                </Route>
-                <Route path="*" element={<h1>404</h1>} />
-                <Route path="/auth" element={<LoginComponent />} />
-            </Routes>
+          {/* Define 1 route report o day */}
+          <Route path="report" element={<ReportComponent />} />
+          <Route path="export" element={<ExportExcelComponent />} />
+        </Route>
+        <Route path="*" element={<h1>404</h1>} />
+        <Route path="/auth" element={<LoginComponent />} />
+      </Routes>
 
-            <ToastContainer
-                position="top-right"
-                autoClose={2500}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
-        </>
-    );
+      <ToastContainer
+        position="top-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
+  );
 }
 
 export default App;

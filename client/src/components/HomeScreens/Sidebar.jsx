@@ -47,36 +47,12 @@ const Sidebar = () => {
                 <NavLink
                     to="/home/export"
                     className={
-                        "flex flex-col w-full justify-center items-center px-2 py-2 my-2  border-b-1 border-gray-300  hover:bg-gray-200"
+                        "flex flex-col w-full justify-center items-center px-2 py-2 my-2  hover:bg-gray-200"
                     }
                 >
                     <PaidIcon />
                     <div className="text-xs">
                         <strong>Budget</strong>
-                    </div>
-                </NavLink>
-
-                <NavLink
-                    to="/home/store"
-                    className={
-                        "flex flex-col w-full justify-center items-center px-2 py-2 my-2  hover:bg-gray-200"
-                    }
-                >
-                    <LocalGroceryStoreIcon />
-                    <div className="text-xs">
-                        <strong>Store</strong>
-                    </div>
-                </NavLink>
-
-                <NavLink
-                    to="home/help"
-                    className={
-                        "flex flex-col w-full justify-center items-center px-2 py-2 my-2  hover:bg-gray-200"
-                    }
-                >
-                    <Help />
-                    <div className="text-xs">
-                        <strong>Help</strong>
                     </div>
                 </NavLink>
             </nav>

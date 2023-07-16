@@ -14,11 +14,11 @@ const RedirectPage = () => {
     };
 
     useEffect(() => {
-        if (checkIsUserLoggedIn()) {
-            navigate("/home");
-        } else {
-            navigate("/auth");
-        }
+        // if (checkIsUserLoggedIn()) {
+        //     navigate("/home");
+        // } else {
+        navigate("/auth");
+        // }
     }, []);
     return <div></div>;
 };
